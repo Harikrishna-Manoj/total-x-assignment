@@ -13,3 +13,5 @@ SizedBox height15 = SizedBox(
   height: 15.h,
 );
 const Color backgroundColor = Color.fromRGBO(235, 235, 235, 1);
+
+List<String> sortingConditionList = ["All", "Age: Elder", "Age: Younger"];

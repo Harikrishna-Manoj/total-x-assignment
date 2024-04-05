@@ -10,6 +10,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController phoneNumberTextController = TextEditingController();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -31,7 +32,10 @@ class LoginPage extends StatelessWidget {
                 textColor: Colors.black,
               ),
               height16,
-              const NumberTextWidget(),
+              CustomTextFieldWidget(
+                  hintText: "Enter Phone Number *",
+                  textController: phoneNumberTextController,
+                  isNumberField: true),
               height16,
               Wrap(
                 children: [

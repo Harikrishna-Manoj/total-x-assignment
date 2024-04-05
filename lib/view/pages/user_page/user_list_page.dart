@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:total_x_assignment/view/constant/const.dart';
+import 'package:total_x_assignment/view/widgets/custom_floating_button.dart';
+import 'package:total_x_assignment/view/widgets/custom_user_tile.dart';
 import 'package:total_x_assignment/view/widgets/login_image.dart';
 import 'package:total_x_assignment/view/widgets/search_field_widget.dart';
 
@@ -49,11 +51,7 @@ class UserPage extends StatelessWidget {
                     height: 44.h,
                     child: const SearchField(),
                   ),
-                  SizedBox(
-                    height: 32.h,
-                    width: 32.w,
-                    child: Image.asset("assets/image/icons/sort_icon.png"),
-                  )
+                  const SortButton()
                 ],
               ),
               height15,
@@ -63,16 +61,81 @@ class UserPage extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return Card(
-                      child: SizedBox(
-                          width: 340.w, height: 76.h, child: const ListTile()),
-                    );
+                    return const CustomUserTile();
                   },
                 ),
               )
             ],
           ),
         ),
+      ),
+      floatingActionButton: const CustomFloatingActionButton(),
+    );
+  }
+}
+
+class SortButton extends StatelessWidget {
+  const SortButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return SizedBox(
+                height: 202.h,
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 16.w,
+                        top: 16.h,
+                      ),
+                      child: Text(
+                        "Sort",
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: 3,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            children: [
+                              Radio(
+                                activeColor: Colors.blue,
+                                splashRadius: BorderSide.strokeAlignInside,
+                                value: 2,
+                                groupValue: 2,
+                                onChanged: (value) {},
+                              ),
+                              Text(
+                                sortingConditionList[index],
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.sp),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ));
+          },
+        );
+      },
+      child: SizedBox(
+        height: 32.h,
+        width: 32.w,
+        child: Image.asset("assets/image/icons/sort_icon.png"),
       ),
     );
   }
