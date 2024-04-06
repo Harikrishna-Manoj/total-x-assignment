@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:total_x_assignment/controller/service/user_service/user_service.dart';
 import 'package:total_x_assignment/view/constant/const.dart';
 import 'package:total_x_assignment/view/widgets/number_textfield_widget.dart';
 
@@ -37,12 +38,15 @@ class CustomFloatingActionButton extends StatelessWidget {
                         SizedBox(
                           height: 19.h,
                         ),
-                        Center(
-                          child: SizedBox(
-                            height: 80.h,
-                            width: 85.w,
-                            child: Image.asset(
-                                "assets/image/icons/user_image_icon.png"),
+                        InkWell(
+                          onTap: () => UserService.profilePicker(context),
+                          child: Center(
+                            child: SizedBox(
+                              height: 80.h,
+                              width: 85.w,
+                              child: Image.asset(
+                                  "assets/image/icons/user_image_icon.png"),
+                            ),
                           ),
                         ),
                         height16,

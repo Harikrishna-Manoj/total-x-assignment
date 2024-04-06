@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:total_x_assignment/controller/login_service/otp_login_service.dart';
+import 'package:total_x_assignment/controller/service/login_service/otp_login_service.dart';
 import 'package:total_x_assignment/view/constant/const.dart';
 import 'package:total_x_assignment/view/widgets/custom_action_button.dart';
 import 'package:total_x_assignment/view/widgets/login_image.dart';
