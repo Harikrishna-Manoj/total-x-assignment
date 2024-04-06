@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:total_x_assignment/controller/login_service/otp_login_service.dart';
 import 'package:total_x_assignment/view/constant/const.dart';
 import 'package:total_x_assignment/view/widgets/custom_action_button.dart';
 import 'package:total_x_assignment/view/widgets/login_image.dart';
@@ -72,10 +73,21 @@ class LoginPage extends StatelessWidget {
               SizedBox(
                 height: 24.h,
               ),
-              const ActionButtons(
-                  colr: Colors.black,
-                  string: "Get OTP",
-                  stringColor: Colors.white)
+              InkWell(
+                onTap: () {
+                  if (phoneNumberTextController.text.length == 10) {
+                    OTPverificationService.sendCode(
+                        phoneNumberTextController.text, context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Enter currect number")));
+                  }
+                },
+                child: const ActionButtons(
+                    colr: Colors.black,
+                    string: "Get OTP",
+                    stringColor: Colors.white),
+              )
             ],
           ),
         ),

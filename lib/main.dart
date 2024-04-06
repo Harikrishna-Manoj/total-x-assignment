@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:total_x_assignment/firebase_options.dart';
 import 'package:total_x_assignment/view/constant/const.dart';
-import 'package:total_x_assignment/view/pages/login_page/login_page.dart';
-import 'package:total_x_assignment/view/pages/otp_page/otp_page.dart';
+import 'package:total_x_assignment/view/pages/warp_page/warp_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,10 +23,9 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp(
-        theme: themeData,
-        debugShowCheckedModeBanner: false,
-        home: const LoginPage(),
-      ),
+          theme: themeData,
+          debugShowCheckedModeBanner: false,
+          home: const WarpPage()),
     );
   }
 }

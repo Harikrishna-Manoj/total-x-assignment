@@ -19,7 +19,6 @@ class CustomTextFieldWidget extends StatelessWidget {
       width: 328.w,
       child: Form(
           child: TextFormField(
-        // focusNode: FocusNode().nearestScop
         controller: textController,
         keyboardType: isNumberField ? TextInputType.number : TextInputType.name,
         inputFormatters:

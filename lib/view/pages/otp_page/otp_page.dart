@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:slide_countdown/slide_countdown.dart';
+import 'package:total_x_assignment/controller/login_service/otp_login_service.dart';
 import 'package:total_x_assignment/view/widgets/custom_action_button.dart';
 import 'package:total_x_assignment/view/widgets/login_image.dart';
 import 'package:total_x_assignment/view/widgets/opt_field.dart';
 
+// ignore: must_be_immutable
 class OTPPage extends StatelessWidget {
-  const OTPPage(
-      {super.key, required this.verificationId, required this.phoneNumber});
+  OTPPage({super.key, required this.verificationId, required this.phoneNumber});
   final String verificationId;
   final String phoneNumber;
-
+  TextEditingController textEditingController1 = TextEditingController();
+  TextEditingController textEditingController2 = TextEditingController();
+  TextEditingController textEditingController3 = TextEditingController();
+  TextEditingController textEditingController4 = TextEditingController();
+  TextEditingController textEditingController5 = TextEditingController();
+  TextEditingController textEditingController6 = TextEditingController();
+// String
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +47,7 @@ class OTPPage extends StatelessWidget {
                   height: 24.h,
                 ),
                 Text(
-                  "Enter the verification code we just sent to your number +91 *******21.",
+                  "Enter the verification code we just sent to your number +91 *******${phoneNumber.substring(8)}.",
                   style: TextStyle(
                     fontSize: 11.sp,
                   ),
@@ -47,16 +55,16 @@ class OTPPage extends StatelessWidget {
                 SizedBox(
                   height: 23.h,
                 ),
-                const Center(
+                Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      OTPTextField(),
-                      OTPTextField(),
-                      OTPTextField(),
-                      OTPTextField(),
-                      OTPTextField(),
-                      OTPTextField(),
+                      OTPTextField(textController: textEditingController1),
+                      OTPTextField(textController: textEditingController2),
+                      OTPTextField(textController: textEditingController3),
+                      OTPTextField(textController: textEditingController4),
+                      OTPTextField(textController: textEditingController5),
+                      OTPTextField(textController: textEditingController6),
                     ],
                   ),
                 ),
@@ -64,12 +72,37 @@ class OTPPage extends StatelessWidget {
                   height: 15.h,
                 ),
                 Center(
-                  child: Text(
-                    "59 Sec",
-                    style: TextStyle(
-                        fontSize: 11.sp,
+                  child: SlideCountdownSeparated(
+                    decoration: const BoxDecoration(color: Colors.transparent),
+                    duration: const Duration(minutes: 2),
+                    separator: "Min",
+                    separatorStyle: TextStyle(
+                        color: Colors.red,
                         fontWeight: FontWeight.w600,
-                        color: Colors.red),
+                        fontSize: 11.sp),
+                    replacement: Text(
+                      "Timeout",
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11.sp),
+                    ),
+                    suffixIcon: Text(
+                      "Sec",
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11.sp),
+                    ),
+                    separatorPadding: const EdgeInsets.all(0),
+                    onDone: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Timeout")));
+                    },
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 11.sp),
                   ),
                 ),
                 SizedBox(
@@ -97,10 +130,16 @@ class OTPPage extends StatelessWidget {
                 SizedBox(
                   height: 17.h,
                 ),
-                const ActionButtons(
-                    colr: Colors.black,
-                    string: "Verify",
-                    stringColor: Colors.white)
+                InkWell(
+                  onTap: () {
+                    OTPverificationService.signIn(
+                        verificationId, "145258", context);
+                  },
+                  child: const ActionButtons(
+                      colr: Colors.black,
+                      string: "Verify",
+                      stringColor: Colors.white),
+                )
               ],
             ),
           ),

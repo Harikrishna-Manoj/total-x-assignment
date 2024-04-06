@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class OTPTextField extends StatelessWidget {
   const OTPTextField({
     super.key,
+    required this.textController,
   });
-
+  final TextEditingController textController;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -19,6 +20,11 @@ class OTPTextField extends StatelessWidget {
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(1)
           ],
+          onChanged: (value) {
+            if (value.isNotEmpty) {
+              FocusScope.of(context).nextFocus();
+            }
+          },
           style: TextStyle(
               fontWeight: FontWeight.w700, color: Colors.red, fontSize: 18.sp),
           decoration: InputDecoration(
