@@ -14,6 +14,7 @@ class OTPTextField extends StatelessWidget {
         height: 44.h,
         width: 44.h,
         child: TextFormField(
+          controller: textController,
           cursorColor: Colors.red,
           keyboardType: TextInputType.number,
           inputFormatters: [

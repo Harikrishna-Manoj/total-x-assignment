@@ -17,7 +17,7 @@ class OTPPage extends StatelessWidget {
   TextEditingController textEditingController4 = TextEditingController();
   TextEditingController textEditingController5 = TextEditingController();
   TextEditingController textEditingController6 = TextEditingController();
-// String
+  String? optCode = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,8 +132,15 @@ class OTPPage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
+                    optCode = textEditingController1.text +
+                        textEditingController2.text +
+                        textEditingController3.text +
+                        textEditingController4.text +
+                        textEditingController5.text +
+                        textEditingController6.text;
+                    print(optCode);
                     OTPverificationService.signIn(
-                        verificationId, "145258", context);
+                        verificationId, optCode!, context);
                   },
                   child: const ActionButtons(
                       colr: Colors.black,
