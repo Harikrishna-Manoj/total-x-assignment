@@ -5,14 +5,18 @@ class LoginImage extends StatelessWidget {
   const LoginImage({
     super.key,
     required this.imagePath,
+    required this.height,
+    required this.width,
   });
+  final double height;
+  final double width;
   final String imagePath;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: 102.h,
-        width: 130.w,
+        height: height.h,
+        width: width.w,
         child: Image.asset(imagePath),
       ),
     );

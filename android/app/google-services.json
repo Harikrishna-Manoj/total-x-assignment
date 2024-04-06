@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1069640263112",
+    "project_id": "totalx-users-app",
+    "storage_bucket": "totalx-users-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069640263112:android:adefaa42723cc19ae9ccfd",
+        "android_client_info": {
+          "package_name": "com.example.total_x_assignment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsIGVVIpvRVWUQ2xq2_eMt1JyZ5m8T4pc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
