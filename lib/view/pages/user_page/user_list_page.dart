@@ -142,9 +142,10 @@ class SortButton extends StatelessWidget {
   const SortButton({
     super.key,
   });
-
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<int> radioValueNotifer = ValueNotifier<int>(0);
+
     return InkWell(
       onTap: () {
         showModalBottomSheet(
@@ -171,23 +172,37 @@ class SortButton extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: 3,
                         itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              Radio(
-                                activeColor: Colors.blue,
-                                splashRadius: BorderSide.strokeAlignInside,
-                                value: 2,
-                                groupValue: 2,
-                                onChanged: (value) {},
-                              ),
-                              Text(
-                                sortingConditionList[index],
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12.sp),
-                              ),
-                            ],
-                          );
+                          return ValueListenableBuilder<int>(
+                              valueListenable: radioValueNotifer,
+                              builder: (context, value, child) {
+                                return Row(
+                                  children: [
+                                    Radio(
+                                      activeColor: Colors.blue,
+                                      splashRadius:
+                                          BorderSide.strokeAlignInside,
+                                      value: index,
+                                      groupValue: radioValueNotifer.value,
+                                      onChanged: (value) {
+                                        radioValueNotifer.value = value!;
+                                        context
+                                            .read<UserBloc>()
+                                            .add(UserListSortingEvent(
+                                              sortingConditionList[value],
+                                              value,
+                                            ));
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    Text(
+                                      sortingConditionList[index],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12.sp),
+                                    ),
+                                  ],
+                                );
+                              });
                         },
                       ),
                     ),

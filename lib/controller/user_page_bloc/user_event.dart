@@ -19,7 +19,7 @@ class SearchuserDataEvent extends UserEvent {
 }
 
 class UserListSortingEvent extends UserEvent {
-  final int sortingAge;
-
-  UserListSortingEvent(this.sortingAge);
+  final String sortingAge;
+  final int index;
+  UserListSortingEvent(this.sortingAge, this.index);
 }
