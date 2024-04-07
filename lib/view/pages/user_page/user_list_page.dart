@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:total_x_assignment/controller/service/user_service/user_service.dart';
@@ -99,7 +100,6 @@ class _UserPageState extends State<UserPage> {
                       context.read<UserBloc>().add(GetuserDataEvent());
                       return BlocBuilder<UserBloc, UserState>(
                         builder: (context, state) {
-                          print(state);
                           return state is UserLoadedState
                               ? state.userList.isNotEmpty
                                   ? ListView.builder(
@@ -128,7 +128,7 @@ class _UserPageState extends State<UserPage> {
                         },
                       );
                     }),
-              )
+              ),
             ],
           ),
         ),

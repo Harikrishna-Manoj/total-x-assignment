@@ -27,9 +27,10 @@ class MyApp extends StatelessWidget {
       child: BlocProvider(
         create: (context) => UserBloc(),
         child: MaterialApp(
-            theme: themeData,
-            debugShowCheckedModeBanner: false,
-            home: const WarpPage()),
+          theme: themeData,
+          debugShowCheckedModeBanner: false,
+          home: const WarpPage(),
+        ),
       ),
     );
   }

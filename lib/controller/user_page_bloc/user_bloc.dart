@@ -22,7 +22,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetuserDataEvent>((event, emit) async {
       emit(UserLoadingState());
       List<UserModel> usersList = [];
-      usersList.addAll(await UserService.fetchNextUsers());
+      usersList = await UserService.fetchNextUsers();
       emit(UserLoadedState(usersList));
     });
     on<SearchuserDataEvent>((event, emit) async {

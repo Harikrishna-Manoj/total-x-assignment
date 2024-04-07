@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'package:total_x_assignment/controller/service/login_service/otp_login_service.dart';
@@ -17,9 +19,11 @@ class OTPPage extends StatelessWidget {
   TextEditingController textEditingController4 = TextEditingController();
   TextEditingController textEditingController5 = TextEditingController();
   TextEditingController textEditingController6 = TextEditingController();
+
   String? optCode = "";
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<bool> actionButtonNotifier = ValueNotifier<bool>(true);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -96,6 +100,7 @@ class OTPPage extends StatelessWidget {
                     ),
                     separatorPadding: const EdgeInsets.all(0),
                     onDone: () {
+                      actionButtonNotifier.value = false;
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Timeout")));
                     },
@@ -116,36 +121,52 @@ class OTPPage extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 11.sp, fontWeight: FontWeight.w500),
                     ),
-                    Text(
-                      "Resend",
-                      style: TextStyle(
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue.shade200,
-                          color: Colors.blue.shade200),
+                    InkWell(
+                      onTap: () async {
+                        OTPverificationService.sendCode(phoneNumber, context);
+                        await Future.delayed(const Duration(minutes: 1));
+                        actionButtonNotifier.value = true;
+                      },
+                      child: Text(
+                        "Resend",
+                        style: TextStyle(
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.blue.shade200,
+                            color: Colors.blue.shade200),
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(
                   height: 17.h,
                 ),
-                InkWell(
-                  onTap: () {
-                    optCode = textEditingController1.text +
-                        textEditingController2.text +
-                        textEditingController3.text +
-                        textEditingController4.text +
-                        textEditingController5.text +
-                        textEditingController6.text;
-                    OTPverificationService.signIn(
-                        verificationId, optCode!, context);
-                  },
-                  child: const ActionButtons(
-                      colr: Colors.black,
-                      string: "Verify",
-                      stringColor: Colors.white),
-                )
+                ValueListenableBuilder(
+                    valueListenable: actionButtonNotifier,
+                    builder: (context, value, child) {
+                      return actionButtonNotifier.value == true
+                          ? InkWell(
+                              onTap: () {
+                                optCode = textEditingController1.text +
+                                    textEditingController2.text +
+                                    textEditingController3.text +
+                                    textEditingController4.text +
+                                    textEditingController5.text +
+                                    textEditingController6.text;
+                                OTPverificationService.signIn(
+                                    verificationId, optCode!, context);
+                              },
+                              child: const ActionButtons(
+                                  colr: Colors.black,
+                                  string: "Verify",
+                                  stringColor: Colors.white),
+                            )
+                          : const ActionButtons(
+                              colr: Colors.grey,
+                              string: "Verify",
+                              stringColor: Color.fromARGB(255, 208, 207, 207));
+                    })
               ],
             ),
           ),

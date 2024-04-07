@@ -76,6 +76,15 @@ class LoginPage extends StatelessWidget {
               InkWell(
                 onTap: () {
                   if (phoneNumberTextController.text.length == 10) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.grey,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    );
                     OTPverificationService.sendCode(
                         phoneNumberTextController.text, context);
                   } else {

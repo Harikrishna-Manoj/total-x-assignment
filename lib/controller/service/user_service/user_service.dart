@@ -111,8 +111,10 @@ class UserService {
     try {
       final userId = FirebaseAuth.instance.currentUser!.phoneNumber;
 
-      final collectionReference =
-          FirebaseFirestore.instance.collection("${userId!}user");
+      final collectionReference = FirebaseFirestore.instance
+          .collection("${userId!}user")
+          .orderBy("age")
+          .limit(limit);
       if (startAfter == null) {
         return collectionReference.get();
       } else {
