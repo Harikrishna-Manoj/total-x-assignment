@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:total_x_assignment/controller/service/user_service/user_service.dart';
+import 'package:total_x_assignment/controller/user_page_bloc/user_bloc.dart';
 import 'package:total_x_assignment/view/constant/const.dart';
 import 'package:total_x_assignment/view/widgets/custom_floating_button.dart';
 import 'package:total_x_assignment/view/widgets/custom_user_tile.dart';
 import 'package:total_x_assignment/view/widgets/login_image.dart';
 import 'package:total_x_assignment/view/widgets/search_field_widget.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
   const UserPage({super.key});
+
+  @override
+  State<UserPage> createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
+  final ScrollController scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+    context.read<UserBloc>().add(GetuserDataEvent());
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent / 2 &&
+        !scrollController.position.outOfRange) {
+      if (UserService.hasNext) {
+        context.read<UserBloc>().add(GetuserDataEvent());
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +89,33 @@ class UserPage extends StatelessWidget {
               const PageHeading(heading: "Users List", textColor: Colors.black),
               height15,
               Expanded(
-                child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return const CustomUserTile();
+                child: BlocBuilder<UserBloc, UserState>(
+                  builder: (context, state) {
+                    return state is UserLoadedState
+                        ? state.userList.isNotEmpty
+                            ? ListView.builder(
+                                controller: scrollController,
+                                itemCount: state.userList.length,
+                                itemBuilder: (context, index) {
+                                  return CustomUserTile(
+                                    index: index,
+                                    userList: state.userList,
+                                  );
+                                },
+                              )
+                            : const Center(
+                                child: Text("No Data"),
+                              )
+                        : state is UserLoadingState
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.black,
+                                ),
+                              )
+                            : const Center(
+                                child: Text("No Data"),
+                              );
                   },
                 ),
               )

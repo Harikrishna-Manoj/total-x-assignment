@@ -7,8 +7,9 @@ class GetuserDataEvent extends UserEvent {}
 
 class AdduserDataEvent extends UserEvent {
   final UserModel userData;
+  final BuildContext context;
 
-  AdduserDataEvent(this.userData);
+  AdduserDataEvent({required this.userData, required this.context});
 }
 
 class SearchuserDataEvent extends UserEvent {

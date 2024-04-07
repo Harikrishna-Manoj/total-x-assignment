@@ -13,7 +13,7 @@ class UserModel {
       name: json['name'],
       age: json['age'],
       phoneNumber: json['phonenumber'],
-      imageUrl: json['imageurl']);
+      imageUrl: json['imageUrl']);
   Map<String, dynamic> toJason() => {
         'name': name,
         'age': age,

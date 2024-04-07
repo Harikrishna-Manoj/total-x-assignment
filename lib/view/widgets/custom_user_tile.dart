@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:total_x_assignment/model/user_model.dart/user_model.dart';
 
 class CustomUserTile extends StatelessWidget {
   const CustomUserTile({
     super.key,
+    required this.userList,
+    required this.index,
   });
-
+  final List<UserModel> userList;
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Card(

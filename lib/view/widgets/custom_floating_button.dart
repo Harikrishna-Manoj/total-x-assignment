@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:total_x_assignment/controller/service/user_service/user_service.dart';
+import 'package:total_x_assignment/controller/user_page_bloc/user_bloc.dart';
+import 'package:total_x_assignment/model/user_model.dart/user_model.dart';
 import 'package:total_x_assignment/view/constant/const.dart';
 import 'package:total_x_assignment/view/widgets/number_textfield_widget.dart';
 
@@ -13,8 +18,10 @@ class CustomFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController nameTextController = TextEditingController();
     TextEditingController ageTextController = TextEditingController();
-    TextEditingController phoneNumberTextController = TextEditingController();
-
+    TextEditingController phoneNumberTextController =
+        TextEditingController(text: "+91 ");
+    ValueNotifier<String> profileNotifer = ValueNotifier('');
+    late File? image;
     return InkWell(
       onTap: () {
         showDialog(
@@ -39,13 +46,32 @@ class CustomFloatingActionButton extends StatelessWidget {
                           height: 19.h,
                         ),
                         InkWell(
-                          onTap: () => UserService.profilePicker(context),
+                          onTap: () async {
+                            image = await UserService.profilePicker(context);
+                            if (image != null) {
+                              profileNotifer.value =
+                                  await UserService.uploadImage(image!);
+                            }
+                          },
                           child: Center(
                             child: SizedBox(
-                              height: 80.h,
+                              height: 85.h,
                               width: 85.w,
-                              child: Image.asset(
-                                  "assets/image/icons/user_image_icon.png"),
+                              child: ValueListenableBuilder(
+                                  valueListenable: profileNotifer,
+                                  builder: (context, value, child) {
+                                    return profileNotifer.value != ''
+                                        ? ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(50)),
+                                            child: Image.network(
+                                              profileNotifer.value,
+                                              fit: BoxFit.cover,
+                                            ))
+                                        : Image.asset(
+                                            "assets/image/icons/user_image_icon.png");
+                                  }),
                             ),
                           ),
                         ),
@@ -70,12 +96,42 @@ class CustomFloatingActionButton extends StatelessWidget {
                 ),
                 actions: [
                   DialogActionButton(
-                      action: () => Navigator.pop(context),
+                      action: () {
+                        Navigator.pop(context);
+                        profileNotifer.value = '';
+                        nameTextController.clear();
+                        ageTextController.clear();
+                        phoneNumberTextController.clear();
+                      },
                       actionText: "Cancel",
                       buttonColor: Colors.grey.shade400,
                       textColor: Colors.black),
                   DialogActionButton(
                       action: () {
+                        if (profileNotifer.value == '') {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Profile image required")));
+                          }
+                        } else if (nameTextController.text.isEmpty ||
+                            ageTextController.text.isEmpty ||
+                            phoneNumberTextController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("All fields are required")));
+                        } else {
+                          if (context.mounted) {
+                            context.read<UserBloc>().add(AdduserDataEvent(
+                                userData: UserModel(
+                                    name: nameTextController.text,
+                                    age: int.parse(ageTextController.text),
+                                    phoneNumber: phoneNumberTextController.text,
+                                    imageUrl: profileNotifer.value),
+                                context: context));
+                          }
+                        }
+
                         Navigator.pop(context);
                       },
                       actionText: "Save",
