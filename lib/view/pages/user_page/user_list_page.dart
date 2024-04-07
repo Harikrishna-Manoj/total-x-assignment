@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:total_x_assignment/controller/service/user_service/user_service.dart';
@@ -35,11 +34,13 @@ class _UserPageState extends State<UserPage> {
   }
 
   void scrollListener() {
-    double maxScroll = scrollController.position.maxScrollExtent;
-    double currentScroll = scrollController.position.pixels;
-    double delta = MediaQuery.of(context).size.height * 0.25;
-    if (maxScroll - currentScroll <= delta) {
-      UserService.fetchNextUsers();
+    if (scrollController.offset >=
+            scrollController.position.maxScrollExtent / 2 &&
+        !scrollController.position.outOfRange) {
+      if (UserService.hasNext) {
+        // UserService.fetchNextUsers();
+        // context.read<UserBloc>().add(GetuserDataEvent());
+      }
     }
   }
 

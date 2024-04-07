@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetuserDataEvent>((event, emit) async {
       emit(UserLoadingState());
       List<UserModel> usersList = [];
-      usersList = await UserService.fetchNextUsers();
+      try {
+        usersList = await UserService.fetchNextUsers();
+      } catch (e) {
+        log(e.toString());
+      }
       emit(UserLoadedState(usersList));
     });
     on<SearchuserDataEvent>((event, emit) async {
