@@ -131,7 +131,10 @@ class CustomFloatingActionButton extends StatelessWidget {
                                 context: context));
                           }
                         }
-
+                        profileNotifer.value = '';
+                        nameTextController.clear();
+                        ageTextController.clear();
+                        phoneNumberTextController.clear();
                         Navigator.pop(context);
                       },
                       actionText: "Save",

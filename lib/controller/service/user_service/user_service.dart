@@ -93,10 +93,8 @@ class UserService {
         limit,
         startAfter: usersSnapshot.isNotEmpty ? usersSnapshot.last : null,
       );
-      usersSnapshot.addAll(snap.docs.toList());
-      userModelList = usersSnapshot.map((snapshot) {
-        return UserModel.fromJson(snapshot.data() as Map<String, dynamic>);
-      }).toList();
+      usersSnapshot.addAll(snap.docs);
+      userModelList = convertToUsersList(usersSnapshot);
 
       if (snap.docs.length < limit) hasNext = false;
     } catch (e) {
@@ -114,7 +112,7 @@ class UserService {
       final userId = FirebaseAuth.instance.currentUser!.phoneNumber;
 
       final collectionReference =
-          FirebaseFirestore.instance.collection("${userId!}user").limit(limit);
+          FirebaseFirestore.instance.collection("${userId!}user");
       if (startAfter == null) {
         return collectionReference.get();
       } else {
@@ -123,5 +121,11 @@ class UserService {
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  static List<UserModel> convertToUsersList(List<DocumentSnapshot> documents) {
+    return documents.map((snapshot) {
+      return UserModel.fromJson(snapshot.data() as Map<String, dynamic>);
+    }).toList();
   }
 }

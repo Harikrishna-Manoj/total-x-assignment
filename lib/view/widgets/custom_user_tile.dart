@@ -21,8 +21,9 @@ class CustomUserTile extends StatelessWidget {
               SizedBox(
                 width: 8.w,
               ),
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 30,
+                backgroundImage: NetworkImage(userList[index].imageUrl),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 10.w, top: 16.h),
@@ -30,7 +31,7 @@ class CustomUserTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Martin Dokidis",
+                      userList[index].name,
                       style: TextStyle(
                           fontSize: 13.sp, fontWeight: FontWeight.w600),
                     ),
@@ -38,7 +39,7 @@ class CustomUserTile extends StatelessWidget {
                       height: 8.h,
                     ),
                     Text(
-                      "+91 9483754887",
+                      userList[index].phoneNumber,
                       style: TextStyle(
                           fontSize: 12.sp, fontWeight: FontWeight.w600),
                     ),
@@ -52,7 +53,7 @@ class CustomUserTile extends StatelessWidget {
                 width: 70.w,
               ),
               Text(
-                "Age: 34",
+                "Age: ${userList[index].age}",
                 style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
               ),
             ],

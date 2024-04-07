@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,15 +34,15 @@ class _UserPageState extends State<UserPage> {
   }
 
   void scrollListener() {
-    if (scrollController.offset >=
-            scrollController.position.maxScrollExtent / 2 &&
-        !scrollController.position.outOfRange) {
-      if (UserService.hasNext) {
-        context.read<UserBloc>().add(GetuserDataEvent());
-      }
+    double maxScroll = scrollController.position.maxScrollExtent;
+    double currentScroll = scrollController.position.pixels;
+    double delta = MediaQuery.of(context).size.height * 0.25;
+    if (maxScroll - currentScroll <= delta) {
+      UserService.fetchNextUsers();
     }
   }
 
+  final String userId = FirebaseAuth.instance.currentUser!.phoneNumber!;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,35 +91,43 @@ class _UserPageState extends State<UserPage> {
               const PageHeading(heading: "Users List", textColor: Colors.black),
               height15,
               Expanded(
-                child: BlocBuilder<UserBloc, UserState>(
-                  builder: (context, state) {
-                    return state is UserLoadedState
-                        ? state.userList.isNotEmpty
-                            ? ListView.builder(
-                                controller: scrollController,
-                                itemCount: state.userList.length,
-                                itemBuilder: (context, index) {
-                                  return CustomUserTile(
-                                    index: index,
-                                    userList: state.userList,
-                                  );
-                                },
-                              )
-                            : const Center(
-                                child: Text("No Data"),
-                              )
-                        : state is UserLoadingState
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.black,
-                                ),
-                              )
-                            : const Center(
-                                child: Text("No Data"),
-                              );
-                  },
-                ),
+                child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("${userId}user")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      context.read<UserBloc>().add(GetuserDataEvent());
+                      return BlocBuilder<UserBloc, UserState>(
+                        builder: (context, state) {
+                          print(state);
+                          return state is UserLoadedState
+                              ? state.userList.isNotEmpty
+                                  ? ListView.builder(
+                                      controller: scrollController,
+                                      itemCount: state.userList.length,
+                                      itemBuilder: (context, index) {
+                                        return CustomUserTile(
+                                          index: index,
+                                          userList: state.userList,
+                                        );
+                                      },
+                                    )
+                                  : const Center(
+                                      child: Text("No Data"),
+                                    )
+                              : state is UserLoadingState
+                                  ? const Center(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.black,
+                                      ),
+                                    )
+                                  : const Center(
+                                      child: Text("No Data"),
+                                    );
+                        },
+                      );
+                    }),
               )
             ],
           ),

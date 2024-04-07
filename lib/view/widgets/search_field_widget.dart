@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:total_x_assignment/controller/user_page_bloc/user_bloc.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField({
@@ -29,7 +31,9 @@ class SearchField extends StatelessWidget {
           hintText: 'Search',
           hintStyle:
               const TextStyle(fontSize: 15, height: 1.5, color: Colors.black)),
-      onChanged: (value) {},
+      onChanged: (value) {
+        context.read<UserBloc>().add(SearchuserDataEvent(value));
+      },
     );
   }
 }
