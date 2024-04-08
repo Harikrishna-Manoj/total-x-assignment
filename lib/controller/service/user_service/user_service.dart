@@ -80,20 +80,19 @@ class UserService {
     }
   }
 
+  static List<UserModel> userModelList = [];
+  static final usersSnapshot = <DocumentSnapshot>[];
   static Future fetchNextUsers() async {
     // if (isFetchingUsers) return;
-
     int limit = 10;
     // isFetchingUsers = true;
 
     try {
-      List<UserModel> userModelList = [];
-      final usersSnapshot = <DocumentSnapshot>[];
       final snap = await getUsers(
         limit,
         startAfter: usersSnapshot.isNotEmpty ? usersSnapshot.last : null,
       );
-      usersSnapshot.addAll(snap.docs);
+      usersSnapshot.addAll(snap.docs.toList());
       userModelList = convertToUsersList(usersSnapshot);
 
       if (snap.docs.length < limit) hasNext = false;
@@ -113,7 +112,8 @@ class UserService {
 
       final collectionReference = FirebaseFirestore.instance
           .collection("${userId!}user")
-          .orderBy("age");
+          .orderBy("age")
+          .limit(limit);
       if (startAfter == null) {
         return collectionReference.get();
       } else {
